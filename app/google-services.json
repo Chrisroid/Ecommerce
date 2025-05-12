@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "729689838867",
+    "project_id": "ecommerce-cb291",
+    "storage_bucket": "ecommerce-cb291.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729689838867:android:1c96d8ea066b4d6fdcb6e6",
+        "android_client_info": {
+          "package_name": "com.chrisroid.ecommerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnEAVLNEbCkxJ_jvE0H01epcWY4vwXoHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
