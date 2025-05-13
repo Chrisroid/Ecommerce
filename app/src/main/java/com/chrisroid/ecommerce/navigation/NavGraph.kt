@@ -40,6 +40,7 @@ fun ECommerceApp(
         composable("products") {
             ProductListScreen(
                 viewModel = productViewModel,
+                cartViewModel = cartViewModel,
                 onProductClick = { productId ->
                     navController.navigate("product/$productId")
                 },
