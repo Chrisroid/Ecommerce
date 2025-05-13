@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import coil.compose.AsyncImage
 import com.chrisroid.ecommerce.data.local.entities.Product
 import com.chrisroid.ecommerce.data.repository.ProductRepository
 import com.chrisroid.ecommerce.features.cart.CartViewModel
+import com.chrisroid.ecommerce.ui.components.BadgedCartIcon
 import com.chrisroid.ecommerce.ui.components.CenterLoading
 import com.chrisroid.ecommerce.ui.components.ErrorView
 
@@ -42,12 +44,15 @@ fun ProductDetailScreen(
     productId: String,
     productRepository: ProductRepository,
     cartViewModel: CartViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onCartClick: () -> Unit
 ) {
     val product = remember { mutableStateOf<Product?>(null) }
     val isLoading = remember { mutableStateOf(true) }
     val error = remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
+    val cartItemCount by cartViewModel.cartItems
+
 
     LaunchedEffect(productId) {
         isLoading.value = true
@@ -69,6 +74,13 @@ fun ProductDetailScreen(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
+                },
+                actions = {
+                    BadgedCartIcon(
+                        itemCount = cartItemCount.size, // Use cart items count
+                        onClick = onCartClick,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
                 }
             )
         },

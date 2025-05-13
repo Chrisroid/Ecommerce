@@ -34,6 +34,8 @@ fun AuthScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoginMode by remember { mutableStateOf(true) }
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
 
     val authState = viewModel.authState.value
 
@@ -54,8 +56,16 @@ fun AuthScreen(
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            isError = emailError != null
         )
+        if (emailError != null) {
+            Text(
+                text = emailError ?: "",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -64,17 +74,37 @@ fun AuthScreen(
             onValueChange = { password = it },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            isError = passwordError != null
         )
+        if (passwordError != null) {
+            Text(
+                text = passwordError ?: "",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
-                if (isLoginMode) {
-                    viewModel.login(email, password)
-                } else {
-                    viewModel.signUp(email, password)
+                emailError = null
+                passwordError = null
+
+                val isValidEmail = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                val isValidPassword = password.length >= 6
+
+                if (!isValidEmail) emailError = "Invalid email format"
+                if (!isValidPassword) passwordError = "Password must be at least 6 characters"
+
+                if (isValidEmail && isValidPassword) {
+                    if (isLoginMode) {
+                        viewModel.login(email, password)
+                    } else {
+                        viewModel.signUp(email, password)
+                    }
                 }
             },
             modifier = Modifier.fillMaxWidth()

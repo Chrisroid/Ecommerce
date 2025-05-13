@@ -56,7 +56,10 @@ fun ECommerceApp(
                 productId = productId,
                 productRepository = productViewModel.repository,
                 cartViewModel = cartViewModel,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onCartClick = {
+                    navController.navigate("cart")
+                }
             )
         }
 
