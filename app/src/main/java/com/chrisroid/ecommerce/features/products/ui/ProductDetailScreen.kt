@@ -137,7 +137,7 @@ fun ProductDetailContent(product: Product) {
         )
 
         Text(
-            text = "$${product.price}",
+            text = "₦${product.price}",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(vertical = 8.dp)

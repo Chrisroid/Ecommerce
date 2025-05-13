@@ -54,7 +54,7 @@ fun ProductItem(
                 )
 
                 Text(
-                    text = "$${product.price}",
+                    text = "₦${product.price}",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(top = 8.dp)

@@ -24,7 +24,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -39,7 +43,31 @@ fun CartScreen(
 ) {
     val cartItems by cartViewModel.cartItems
     val totalPrice = cartViewModel.getTotalPrice()
+    var showCheckoutDialog by rememberSaveable { mutableStateOf(false) }
 
+
+    LaunchedEffect(Unit) {
+        // You would get this from Paystack callback
+        val paymentSuccess = false // Replace with actual payment status
+
+        if (paymentSuccess) {
+            cartViewModel.clearCart()
+            onCheckout()
+        }
+    }
+
+    if (showCheckoutDialog) {
+        CheckoutDialog(
+            cartItems = cartItems,
+            totalPrice = totalPrice,
+            onDismiss = { showCheckoutDialog = false },
+            onPayWithPaystack = {
+                // Initialize Paystack payment here
+                showCheckoutDialog = false
+//                initiatePaystackPayment(totalPrice, cartItems)
+            }
+        )
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -66,7 +94,7 @@ fun CartScreen(
                             style = MaterialTheme.typography.headlineLarge
                         )
                         Text(
-                            text = "$${"%.2f".format(totalPrice)}",
+                            text = "₦${"%.2f".format(totalPrice)}",
                             style = MaterialTheme.typography.headlineLarge
                         )
                     }
@@ -74,7 +102,7 @@ fun CartScreen(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Button(
-                        onClick = onCheckout,
+                        onClick = { showCheckoutDialog = true },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = cartItems.isNotEmpty()
                     ) {
