@@ -1,11 +1,14 @@
 package com.chrisroid.ecommerce.di
 
 import android.content.Context
+import android.net.ConnectivityManager
 import androidx.room.Room
 import com.chrisroid.ecommerce.data.local.AppDatabase
 import com.chrisroid.ecommerce.data.local.dao.ProductDao
+import com.chrisroid.ecommerce.data.remote.NetworkMonitor
 import com.chrisroid.ecommerce.data.remote.api.ProductApi
 import com.chrisroid.ecommerce.features.auth.AuthService
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,4 +66,19 @@ object AppModule {
     fun provideAuthService(): AuthService {
         return AuthService()
     }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseFirestore(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNetworkMonitor(@ApplicationContext context: Context): NetworkMonitor {
+        return NetworkMonitor(
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        )
+    }
+
 }

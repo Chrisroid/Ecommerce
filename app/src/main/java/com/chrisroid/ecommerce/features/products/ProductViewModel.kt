@@ -23,6 +23,12 @@ class ProductViewModel @Inject constructor(
     private val _error = mutableStateOf<String?>(null)
     val error: State<String?> = _error
 
+    private val _searchQuery = mutableStateOf("")
+    val searchQuery: State<String> = _searchQuery
+
+    private val _filterCategory = mutableStateOf<String?>(null)
+    val filterCategory: State<String?> = _filterCategory
+
     init {
         loadProducts()
     }
@@ -54,5 +60,21 @@ class ProductViewModel @Inject constructor(
                 _isLoading.value = false
             }
         }
+    }
+
+    val filteredProducts: List<Product>
+        get() = products.value.filter { product ->
+            (searchQuery.value.isEmpty() ||
+                    product.name.contains(searchQuery.value, true)) &&
+                    (filterCategory.value == null ||
+                            product.category == filterCategory.value)
+        }
+
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
+
+    fun setFilterCategory(category: String?) {
+        _filterCategory.value = category
     }
 }
