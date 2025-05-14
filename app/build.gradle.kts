@@ -50,6 +50,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.runtime.livedata)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 

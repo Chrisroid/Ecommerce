@@ -2,6 +2,8 @@ package com.chrisroid.ecommerce.features.cart
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chrisroid.ecommerce.data.local.entities.Product
 import com.chrisroid.ecommerce.data.model.CartItem
@@ -61,5 +63,31 @@ class CartViewModel @Inject constructor() : ViewModel() {
 
     fun clearCart() {
         _cartItems.value = emptyList()
+    }
+
+    private val _paymentStatus = MutableLiveData<PaymentStatus>(PaymentStatus.NONE)
+    val paymentStatus: LiveData<PaymentStatus> = _paymentStatus
+
+    sealed class PaymentStatus {
+        object NONE : PaymentStatus()
+        object PROCESSING : PaymentStatus()
+        data class SUCCESS(val reference: String) : PaymentStatus()
+        data class FAILED(val message: String) : PaymentStatus()
+    }
+
+    fun setPaymentProcessing() {
+        _paymentStatus.value = PaymentStatus.PROCESSING
+    }
+
+    fun setPaymentSuccess(reference: String) {
+        _paymentStatus.value = PaymentStatus.SUCCESS(reference)
+    }
+
+    fun setPaymentFailed(message: String) {
+        _paymentStatus.value = PaymentStatus.FAILED(message)
+    }
+
+    fun resetPaymentStatus() {
+        _paymentStatus.value = PaymentStatus.NONE
     }
 }

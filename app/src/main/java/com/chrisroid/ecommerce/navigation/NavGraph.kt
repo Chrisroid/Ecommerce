@@ -66,11 +66,8 @@ fun ECommerceApp(
         composable("cart") {
             CartScreen(
                 cartViewModel = cartViewModel,
-                onCheckout = {
-                    cartViewModel.clearCart()
-                    navController.popBackStack()
-                },
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                navController = navController
             )
         }
     }
